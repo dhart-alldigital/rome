@@ -37,6 +37,7 @@ import com.rometools.modules.mediarss.types.Metadata;
 import com.rometools.modules.mediarss.types.PlayerReference;
 import com.rometools.modules.mediarss.types.Rating;
 import com.rometools.modules.mediarss.types.Restriction;
+import com.rometools.modules.mediarss.types.SubTitle;
 import com.rometools.modules.mediarss.types.Text;
 import com.rometools.modules.mediarss.types.Thumbnail;
 import com.rometools.modules.mediarss.types.UrlReference;
@@ -100,6 +101,7 @@ public class MediaModuleGenerator implements ModuleGenerator {
         addNotNullAttribute(mc, "lang", c.getLanguage());
         addNotNullAttribute(mc, "samplingrate", c.getSamplingrate());
         addNotNullAttribute(mc, "type", c.getType());
+        addNotNullAttribute(mc, "width", c.getWidth());
         addNotNullAttribute(mc, "width", c.getWidth());
 
         if (c.isDefaultContent()) {
@@ -217,6 +219,15 @@ public class MediaModuleGenerator implements ModuleGenerator {
             final Element res = addNotNullElement(e, "restriction", element.getValue());
             addNotNullAttribute(res, "type", element.getType());
             addNotNullAttribute(res, "relationship", element.getRelationship());
+        }
+        
+        final SubTitle[] subtitles = m.getSubTitles();
+        for (final SubTitle element : subtitles) {
+            final Element st = new Element("subTitle", NS);
+            addNotNullAttribute(st, "href", element.getUrl());
+            addNotNullAttribute(st, "type", element.getType());
+            addNotNullAttribute(st, "lang", element.getLang());
+            e.addContent(st);
         }
     }
 

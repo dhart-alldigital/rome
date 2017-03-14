@@ -48,6 +48,7 @@ import com.rometools.modules.mediarss.types.Metadata;
 import com.rometools.modules.mediarss.types.PlayerReference;
 import com.rometools.modules.mediarss.types.Rating;
 import com.rometools.modules.mediarss.types.Restriction;
+import com.rometools.modules.mediarss.types.SubTitle;
 import com.rometools.modules.mediarss.types.Text;
 import com.rometools.modules.mediarss.types.Thumbnail;
 import com.rometools.modules.mediarss.types.Time;
@@ -468,6 +469,30 @@ public class MediaModuleParser implements ModuleParser {
 
                 md.setRatings(r);
             }
+        }
+
+        // subTitles
+        {
+            final List<Element> subTitles = e.getChildren("subTitle", getNS());
+            final ArrayList<SubTitle> values = new ArrayList<SubTitle>();
+
+            for (int i = 0; i < subTitles.size(); i++) {
+            	try {
+	                final Element st = subTitles.get(i);
+	                final String type = st.getAttributeValue("type");
+	                final String lang = st.getAttributeValue("lang");
+	                final String url = st.getAttributeValue("url");
+	                final URI uri = new URI(url);
+	                
+	                final SubTitle value = new SubTitle(uri, type, lang);
+	                values.add(value);
+
+                } catch (final Exception ex) {
+                    LOG.warn("Exception parsing subTitle tag.", ex);
+                }
+            }
+
+            md.setRestrictions(values.toArray(new Restriction[values.size()]));
         }
 
         return md;
